@@ -16,7 +16,8 @@ const Query = {
 
 const Mutation = {
   async createUser(parent: any, args: any, ctx: any): Promise<schema.Mutation['createUser']> {
-    return await userController().create(args);
+    const { name, email, age, country, role, password } = args.input;
+    return await userController().create({ name, email, age, country, role, password });
   },
   async updateUser(parent: any, args: any, ctx: any): Promise<schema.Mutation['updateUser']> {
     return await userController().update(args);
