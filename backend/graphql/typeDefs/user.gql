@@ -1,19 +1,29 @@
 type User {
   _id: ID!
-  name: String
-  email: String
-  photo: String
+  name: String!
+  email: String!
+  age: Int!
+  country: String!
+  role: String!
+  password: String!
+  interests: [String]!
+  photo: String!
 }
 
 input InputUserType {
   name: String!
   email: String!
+  age: Int!
+  country: String!
+  role: String!
+  password: String!
 }
 
 type Mutation {
   createUser(body: InputUserType!): User
   updateUser(_id: ID!, body: InputUserType!): User
   deleteUser(_id: ID!): User
+  updateUserInterests(userId: ID!, interests: [String!]!): User!
 }
 
 type PaginationType {
@@ -28,6 +38,7 @@ type UserEdgesType {
 }
 
 type Query {
+  user(_id: ID!): User
   readUser(_id: ID!): User
   listUser(page: Int, limit: Int, sortBy: String, sortOrder: String): UserEdgesType
   searchUser(limit: Int, query: String!, fields: String!): [User]

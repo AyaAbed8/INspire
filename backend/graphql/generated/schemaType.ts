@@ -14,6 +14,19 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type Conversation = {
+  __typename?: 'Conversation';
+  _id: Scalars['ID']['output'];
+  messages: Array<Message>;
+  participants: Array<User>;
+};
+
+export type CreatePostInput = {
+  author: Scalars['ID']['input'];
+  content: Scalars['String']['input'];
+  tags: Array<Scalars['String']['input']>;
+};
+
 export type InputPlaceType = {
   desciption: Scalars['String']['input'];
   mainPhoto: Scalars['String']['input'];
@@ -31,13 +44,27 @@ export type InputReviewType = {
 };
 
 export type InputUserType = {
+  age: Scalars['Int']['input'];
+  country: Scalars['String']['input'];
   email: Scalars['String']['input'];
   name: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  role: Scalars['String']['input'];
+};
+
+export type Message = {
+  __typename?: 'Message';
+  content: Scalars['String']['output'];
+  sender: User;
+  timestamp: Scalars['String']['output'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addMessage: Message;
+  createConversation: Conversation;
   createPlace?: Maybe<Place>;
+  createPost: Post;
   createReview?: Maybe<Review>;
   createUser?: Maybe<User>;
   deletePlace?: Maybe<Place>;
@@ -46,11 +73,30 @@ export type Mutation = {
   updatePlace?: Maybe<Place>;
   updateReview?: Maybe<Review>;
   updateUser?: Maybe<User>;
+  updateUserInterests: User;
+};
+
+
+export type MutationAddMessageArgs = {
+  content: Scalars['String']['input'];
+  conversationId: Scalars['ID']['input'];
+  sender: Scalars['ID']['input'];
+};
+
+
+export type MutationCreateConversationArgs = {
+  recipient: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
 };
 
 
 export type MutationCreatePlaceArgs = {
   body: InputPlaceType;
+};
+
+
+export type MutationCreatePostArgs = {
+  input: CreatePostInput;
 };
 
 
@@ -96,6 +142,12 @@ export type MutationUpdateUserArgs = {
   body: InputUserType;
 };
 
+
+export type MutationUpdateUserInterestsArgs = {
+  interests: Array<Scalars['String']['input']>;
+  userId: Scalars['ID']['input'];
+};
+
 export type PaginationType = {
   __typename?: 'PaginationType';
   count: Scalars['Int']['output'];
@@ -120,11 +172,24 @@ export type PlaceEdgesType = {
   pagination?: Maybe<PaginationType>;
 };
 
+export type Post = {
+  __typename?: 'Post';
+  _id: Scalars['ID']['output'];
+  author: User;
+  content: Scalars['String']['output'];
+  tags: Array<Scalars['String']['output']>;
+  timestamp: Scalars['String']['output'];
+};
+
 export type Query = {
   __typename?: 'Query';
+  getConversationBetweenUsers?: Maybe<Conversation>;
+  listConversations: Array<Conversation>;
   listPlace?: Maybe<PlaceEdgesType>;
+  listPosts: Array<Post>;
   listReview?: Maybe<ReviewEdgesType>;
   listUser?: Maybe<UserEdgesType>;
+  readConversation?: Maybe<Conversation>;
   readPlace?: Maybe<Place>;
   readReview?: Maybe<Review>;
   readUser?: Maybe<User>;
@@ -132,6 +197,18 @@ export type Query = {
   searchPlace?: Maybe<Array<Maybe<Place>>>;
   searchReview?: Maybe<Array<Maybe<Review>>>;
   searchUser?: Maybe<Array<Maybe<User>>>;
+  user?: Maybe<User>;
+};
+
+
+export type QueryGetConversationBetweenUsersArgs = {
+  recipientId: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
+};
+
+
+export type QueryListConversationsArgs = {
+  userId: Scalars['ID']['input'];
 };
 
 
@@ -156,6 +233,11 @@ export type QueryListUserArgs = {
   page?: InputMaybe<Scalars['Int']['input']>;
   sortBy?: InputMaybe<Scalars['String']['input']>;
   sortOrder?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryReadConversationArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -199,6 +281,11 @@ export type QuerySearchUserArgs = {
   query: Scalars['String']['input'];
 };
 
+
+export type QueryUserArgs = {
+  _id: Scalars['ID']['input'];
+};
+
 export type Review = {
   __typename?: 'Review';
   _id: Scalars['ID']['output'];
@@ -217,9 +304,14 @@ export type ReviewEdgesType = {
 export type User = {
   __typename?: 'User';
   _id: Scalars['ID']['output'];
-  email?: Maybe<Scalars['String']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  photo?: Maybe<Scalars['String']['output']>;
+  age: Scalars['Int']['output'];
+  country: Scalars['String']['output'];
+  email: Scalars['String']['output'];
+  interests: Array<Maybe<Scalars['String']['output']>>;
+  name: Scalars['String']['output'];
+  password: Scalars['String']['output'];
+  photo: Scalars['String']['output'];
+  role: Scalars['String']['output'];
 };
 
 export type UserEdgesType = {

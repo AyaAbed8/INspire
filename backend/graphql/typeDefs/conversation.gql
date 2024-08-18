@@ -1,0 +1,24 @@
+# backend/graphql/typeDefs/conversation.gql
+
+type Message {
+  sender: User!
+  content: String!
+  timestamp: String!
+}
+
+type Conversation {
+  _id: ID!
+  participants: [User!]!
+  messages: [Message!]!
+}
+
+type Query {
+  listConversations(userId: ID!): [Conversation!]!
+  readConversation(id: ID!): Conversation
+  getConversationBetweenUsers(userId: ID!, recipientId: ID!): Conversation 
+}
+
+type Mutation {
+  createConversation(userId: ID!, recipient: ID!): Conversation!
+  addMessage(conversationId: ID!, sender: ID!, content: String!): Message!
+}

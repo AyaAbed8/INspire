@@ -3,20 +3,24 @@ import { Model } from 'mongoose';
 import { crudControllerType, listArgsType } from './crudControllerType';
 
 function crudMethods<T>(ModelEntity: Model<T>) {
-  let methods: crudControllerType<T> = {
+  const methods: crudControllerType<T> = {
     create: async (args) => {
       try {
         // Creating a new document in the collection
         if (!args?.body) {
+          console.error("no body provided for creation")
           return null;
         }
-        const result: any = await new ModelEntity(args?.body).save();
+        const newDocument = new ModelEntity(args.body);
+        const result = await newDocument.save();
         if (!result) {
+          console.error("failed to create doc")
           return null;
         } else {
-          return result;
+          return result.toObject();
         }
       } catch (err) {
+        console.error("error creating doc:",err)
         return null;
       }
     },

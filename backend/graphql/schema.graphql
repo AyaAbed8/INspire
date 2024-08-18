@@ -1,4 +1,28 @@
-type Place {
+# backend/graphql/typeDefs/conversation.gql
+
+type Message {
+  sender: User!
+  content: String!
+  timestamp: String!
+}
+
+type Conversation {
+  _id: ID!
+  participants: [User!]!
+  messages: [Message!]!
+}
+
+type Query {
+  listConversations(userId: ID!): [Conversation!]!
+  readConversation(id: ID!): Conversation
+  getConversationBetweenUsers(userId: ID!, recipientId: ID!): Conversation 
+}
+
+type Mutation {
+  createConversation(userId: ID!, recipient: ID!): Conversation!
+  addMessage(conversationId: ID!, sender: ID!, content: String!): Message!
+}
+ type Place {
   _id: ID!
   owner: User
   desciption: String
@@ -39,6 +63,30 @@ type Query {
   listPlace(page: Int, limit: Int, sortBy: String, sortOrder: String): PlaceEdgesType
   searchPlace(limit: Int, query: String!, fields: String!): [Place]
 }
+ # backend/graphql/typeDefs/post.gql
+
+type Post {
+  _id: ID!
+  author: User!
+  content: String!
+  tags: [String!]!
+  timestamp: String!
+}
+
+type Query {
+  listPosts: [Post!]!
+}
+
+type Mutation {
+  createPost(input: CreatePostInput!): Post!
+}
+
+input CreatePostInput {
+  author: ID!
+  content: String!
+  tags: [String!]!
+}
+
  type Review {
   _id: ID!
   author: User
@@ -82,20 +130,30 @@ type Query {
 }
  type User {
   _id: ID!
-  name: String
-  email: String
-  photo: String
+  name: String!
+  email: String!
+  age: Int!
+  country: String!
+  role: String!
+  password: String!
+  interests: [String]!
+  photo: String!
 }
 
 input InputUserType {
   name: String!
   email: String!
+  age: Int!
+  country: String!
+  role: String!
+  password: String!
 }
 
 type Mutation {
   createUser(body: InputUserType!): User
   updateUser(_id: ID!, body: InputUserType!): User
   deleteUser(_id: ID!): User
+  updateUserInterests(userId: ID!, interests: [String!]!): User!
 }
 
 type PaginationType {
@@ -110,6 +168,7 @@ type UserEdgesType {
 }
 
 type Query {
+  user(_id: ID!): User
   readUser(_id: ID!): User
   listUser(page: Int, limit: Int, sortBy: String, sortOrder: String): UserEdgesType
   searchUser(limit: Int, query: String!, fields: String!): [User]

@@ -1,0 +1,24 @@
+# backend/graphql/typeDefs/post.gql
+
+type Post {
+  _id: ID!
+  author: User!
+  content: String!
+  tags: [String!]!
+  timestamp: String!
+}
+
+type Query {
+  listPosts: [Post!]!
+}
+
+type Mutation {
+  createPost(input: CreatePostInput!): Post!
+}
+
+input CreatePostInput {
+  author: ID!
+  content: String!
+  tags: [String!]!
+}
+
